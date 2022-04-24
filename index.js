@@ -9,10 +9,10 @@ const consoleTable = require("console.table");
 const promptMessages = {
   viewAllEmployees: "View All Employees",
   viewAllDepartments: "View All Departments",
+  viewAllRoles: "View All Roles",
   addEmployee: "Add an Employee",
   removeEmployee: "Remove an Employee",
   updateEmployeeRole: "Update Employee Role",
-  viewAllRoles: "View All Roles",
   exit: "Exit"
 };
 
@@ -82,6 +82,32 @@ function prompt() {
     });
 }
 
+// if the user selects to View All Employees
 function viewAllEmployees() {
+
+}
+
+// if the user selects to View All Departments
+function viewAllDepartments() {
+
+}
+
+// if the user selects to View All Roles
+function viewAllRoles() {
+
+}
+
+// if the user selects to Add an Employee
+function addEmployee() {
+
+}
+
+// if the user selects to Remove an Employee
+function removeEmployee() {
+
+}
+
+// if the user selects to Update an Employee Role
+function updateEmployeeRole() {
 
 }
