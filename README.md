@@ -32,3 +32,6 @@ Here is the link to clone for the GitHub repository:
 Here is the link to the video demonstration:
 
 ## Screenshot
+
+## Author
+Madison Kendall
