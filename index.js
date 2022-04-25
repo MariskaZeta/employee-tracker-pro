@@ -65,6 +65,14 @@ function prompt() {
           viewAllRoles();
           break;
 
+        case promptMessages.addDepartment:
+        addDepartment();
+        break;
+
+        case promptMessages.addRole:
+        addRole();
+        break;
+
         case promptMessages.addEmployee:
           addEmployee();
           break;
@@ -160,6 +168,7 @@ function addDepartment() {
 };
 
 // if the user selects to Add a Role
+inquirer 
 
 // if the user selects to Add an Employee
 function addEmployee() {
