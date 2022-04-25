@@ -242,7 +242,94 @@ function addRole() {
 
 // if the user selects to Add an Employee
 function addEmployee() {
-}
+  inquirer
+  .prompt([
+    {
+      type: "input",
+      name: "firstName",
+      message: "What is the employee's first name?",
+      validate: addFirst => {
+        if (addFirst) {
+          return true;
+        } else {
+          console.log("Please enter a first name.");
+          return false;
+        }
+      }
+    },
+    {
+      type: "input",
+      name: "lastName",
+      message: "What is the employee's last name?",
+      validate: addLast => {
+        if (addLast) {
+         return true;
+       } else {
+         console.log("Please enter a last name.");
+         return false;
+       }
+      }
+    }
+  ])
+  .then(answer => {
+    const params = [answer.firstName, answer.lastName]
+
+    // getting roles from roles table
+    const roleSql = `SELECT role.title, role.id FROM role`;
+
+    connection.promise().query(roleSql, (err, data) => {
+      if (err) throw err;
+
+      const roles = data.map(({ id, title }) => ({ name: title, value: id }));
+
+      inquirer.prompt([
+        {
+          type: "list",
+          name: "role",
+          message: "What is employee's role?",
+          choices: roles
+        }
+      ])
+      .then(roleChoice => {
+        const role = roleChoice.role;
+        params.push(role);
+
+        const managerSql = `SELECT * FROM employee`;
+
+        connection.promise().query(managerSql, (err, data) => {
+          if (err) throw err;
+
+          const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
+
+          console.log(managers);
+
+          inquirer.prompt([
+            {
+              type: "list",
+              name: "manager",
+              message: "Who is this employee's manager?",
+              choices: managers
+            }
+          ])
+          .then(managerChoice => {
+            const manager = managerChoice.manager;
+            params.push(manager);
+
+            const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+            VALUES (?, ?, ?, ?)`;
+
+            connection.query(sql, params, (err, result) => {
+              if (err) throw err;
+              console.log("A new employee has been added!")
+
+              viewAllEmployees();
+            });
+          });
+        });
+      });
+    });
+  });
+};
 
 // if the user selects to Remove an Employee
 function removeEmployee() {
