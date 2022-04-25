@@ -10,6 +10,8 @@ const promptMessages = {
   viewAllEmployees: "View All Employees",
   viewAllDepartments: "View All Departments",
   viewAllRoles: "View All Roles",
+  addDepartment: "Add a Department",
+  addRole: "Add a Role",
   addEmployee: "Add an Employee",
   removeEmployee: "Remove an Employee",
   updateEmployeeRole: "Update Employee Role",
@@ -96,6 +98,7 @@ function viewAllEmployees() {
 
    connection.promise().query(sql, (err, rows) => {
      if (err) throw err;
+     // displays tabular data as a table
      console.table(rows);
      prompt();
    });
@@ -108,6 +111,7 @@ function viewAllDepartments() {
 
   connection.promise().query(sql, (err, rows) => {
     if (err) throw err;
+    // displays tabular data as a table
     console.table(rows);
     prompt();
   });
@@ -120,10 +124,42 @@ function viewAllRoles() {
 
   connection.promise().query(sql, (err, rows) => {
     if (err) throw err;
+    // displays tabular data as a table
     console.table(rows);
     prompt();
   });
 };
+
+// if the user selects to Add a Department
+function addDepartment() {
+  inquirer
+  .prompt([
+    type: "input",
+    name: "addDept",
+    message: "What department would you like to add?",
+    validate: addDept => {
+      if (addDept) {
+        return true;
+      } else {
+        console.log("Please enter a department to add.");
+        return false;
+      }
+    }
+  ])
+  // adding the department the user entered to the database
+  .then(answer => {
+    const sql = `INSERT INTO department (name)
+    VALUES (?)`;
+    connection.query(sql, answer.addDept, (err, result) => {
+      if (err) throw err;
+      console.log("You have added " + answer.addDept + " to the departments.");
+
+      viewAllDepartments();
+    });
+  });
+};
+
+// if the user selects to Add a Role
 
 // if the user selects to Add an Employee
 function addEmployee() {
