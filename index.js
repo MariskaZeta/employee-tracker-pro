@@ -115,8 +115,15 @@ function viewAllDepartments() {
 
 // if the user selects to View All Roles
 function viewAllRoles() {
-  console.log("Showing all roles")
-}
+  console.log("Showing all roles-\n");
+  const sql = `SELECT role.title, role.id, department.name AS department, role.salary FROM role`;
+
+  connection.promise().query(sql, (err, rows) => {
+    if (err) throw err;
+    console.table(rows);
+    prompt();
+  });
+};
 
 // if the user selects to Add an Employee
 function addEmployee() {
