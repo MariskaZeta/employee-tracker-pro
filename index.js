@@ -84,17 +84,38 @@ function prompt() {
 
 // if the user selects to View All Employees
 function viewAllEmployees() {
+  console.log("Showing all employees-\n");
+  const sql = `SELECT employee.id,
+   employee.first_name,
+   employee.last_name,
+   role.title,
+   department.name AS department,
+   role.salary,
+   CONCAT (manager.first_name, " ", manager.last_name) AS manager
+   FROM employee`;
 
-}
+   connection.promise().query(sql, (err, rows) => {
+     if (err) throw err;
+     console.table(rows);
+     prompt();
+   });
+};
 
 // if the user selects to View All Departments
 function viewAllDepartments() {
+  console.log("Showing all departments-\n");
+  const sql = `SELECT department.id AS id, department.name AS department FROM department`;
 
-}
+  connection.promise().query(sql, (err, rows) => {
+    if (err) throw err;
+    console.table(rows);
+    prompt();
+  });
+};
 
 // if the user selects to View All Roles
 function viewAllRoles() {
-
+  console.log("Showing all roles")
 }
 
 // if the user selects to Add an Employee
