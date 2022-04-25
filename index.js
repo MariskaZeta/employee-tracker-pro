@@ -44,6 +44,8 @@ function prompt() {
         promptMessages.viewAllEmployees,
         promptMessages.viewAllDepartments,
         promptMessages.viewAllRoles,
+        promptMessages.addRole,
+        promptMessages.addDepartment,
         promptMessages.addEmployee,
         promptMessages.removeEmployee,
         promptMessages.updateEmployeeRole,
@@ -66,12 +68,12 @@ function prompt() {
           break;
 
         case promptMessages.addDepartment:
-        addDepartment();
-        break;
+          addDepartment();
+          break;
 
         case promptMessages.addRole:
-        addRole();
-        break;
+          addRole();
+          break;
 
         case promptMessages.addEmployee:
           addEmployee();
@@ -104,12 +106,12 @@ function viewAllEmployees() {
    CONCAT (manager.first_name, " ", manager.last_name) AS manager
    FROM employee`;
 
-   connection.promise().query(sql, (err, rows) => {
-     if (err) throw err;
-     // displays tabular data as a table
-     console.table(rows);
-     prompt();
-   });
+  connection.promise().query(sql, (err, rows) => {
+    if (err) throw err;
+    // displays tabular data as a table
+    console.table(rows);
+    prompt();
+  });
 };
 
 // if the user selects to View All Departments
@@ -141,101 +143,105 @@ function viewAllRoles() {
 // if the user selects to Add a Department
 function addDepartment() {
   inquirer
-  .prompt([
-    type: "input",
-    name: "addDept",
-    message: "What department would you like to add?",
-    validate: addDept => {
-      if (addDept) {
-        return true;
-      } else {
-        console.log("Please enter a department to add.");
-        return false;
+    .prompt([{
+      type: "input",
+      name: "addDept",
+      message: "What department would you like to add?",
+      validate: addDept => {
+        if (addDept) {
+          return true;
+        } else {
+          console.log("Please enter a department to add.");
+          return false;
+        }
       }
-    }
-  ])
-  // adding the department the user entered to the database
-  .then(answer => {
-    const sql = `INSERT INTO department (name)
+    }])
+    // adding the department the user entered to the database
+    .then(answer => {
+      const sql = `INSERT INTO department (name)
     VALUES (?)`;
-    connection.query(sql, answer.addDept, (err, result) => {
-      if (err) throw err;
-      console.log("You have added " + answer.addDept + " to the departments.");
+      connection.query(sql, answer.addDept, (err, result) => {
+        if (err) throw err;
+        console.log("You have added " + answer.addDept + " to the departments.");
 
-      viewAllDepartments();
+        viewAllDepartments();
+      });
     });
-  });
 };
 
 // if the user selects to Add a Role
 function addRole() {
   inquirer
-  .prompt([
-    type: "input",
-    name: "role",
-    message: "What role would you like to add?",
-    validate: addRole => {
-      if (addRole) {
-        return true;
-      } else {
-        console.log("Please enter a role to add.");
-        return false;
-      }
-    }
-  },
-  type: "input",
-  name: "salary",
-  message: "What is the salary of this role?",
-  validate: roleSalary => {
-    if(isNAN(roleSalary)) {
-      return true;
-    } else {
-      console.log("Please enter the salary for this role.");
-      return false;
-    }
-  }
-}
-  ])
-  .then(answer => {
-    const params = [answer.role, answer.salary];
-
-    // getting the department from the department table
-    const roleSql = `SELECT name, id FROM department`;
-
-    connection.promise().query(roleSql, (err, data) => {
-      if (err) throw err;
-
-      const dept = data.map(({ name, id }) => ({ name: name, value: id }));
-
-      inquirer.prompt([
-        {
-          type: "list",
-          name: "dept",
-          message: "What department is this role in?",
-          choices: dept
+    .prompt([{
+        type: "input",
+        name: "role",
+        message: "What role would you like to add?",
+        validate: addRole => {
+          if (addRole) {
+            return true;
+          } else {
+            console.log("Please enter a role to add.");
+            return false;
+          }
         }
-      ])
-      .then(deptChoice => {
-        const dept = deptChoice.dept;
-        params.push(dept);
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "What is the salary of this role?",
+        validate: roleSalary => {
+          if (isNAN(roleSalary)) {
+            return true;
+          } else {
+            console.log("Please enter the salary for this role.");
+            return false;
+          }
+        }
+      }
+    ])
+    .then(answer => {
+      const params = [answer.role, answer.salary];
 
-        const sql = `INSERT INTO role (title, salary, department_id)
+      // getting the department from the department table
+      const roleSql = `SELECT name, id FROM department`;
+
+      connection.promise().query(roleSql, (err, data) => {
+        if (err) throw err;
+
+        const dept = data.map(({
+          name,
+          id
+        }) => ({
+          name: name,
+          value: id
+        }));
+
+        inquirer.prompt([{
+            type: "list",
+            name: "dept",
+            message: "What department is this role in?",
+            choices: dept
+          }])
+          .then(deptChoice => {
+            const dept = deptChoice.dept;
+            params.push(dept);
+
+            const sql = `INSERT INTO role (title, salary, department_id)
         VALUES (?, ?, ?)`;
 
-        connection.query(sql, params, (err, result) => {
-          if (err) throw err;
-          console.log("Added " + answer.role + " to roles.");
+            connection.query(sql, params, (err, result) => {
+              if (err) throw err;
+              console.log("Added " + answer.role + " to roles.");
 
-          viewAllRoles();
-        });
+              viewAllRoles();
+            });
+          });
       });
     });
-  });
 };
 
 // if the user selects to Add an Employee
 function addEmployee() {
-
 }
 
 // if the user selects to Remove an Employee
