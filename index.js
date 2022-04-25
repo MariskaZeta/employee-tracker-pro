@@ -1,6 +1,5 @@
 // Madison Kendall EMPLOYEE TRACKER PRO CODE
 
-
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const consoleTable = require("console.table");
@@ -106,7 +105,7 @@ function viewAllEmployees() {
    CONCAT (manager.first_name, " ", manager.last_name) AS manager
    FROM employee`;
 
-  connection.promise().query(sql, (err, rows) => {
+  connection.query(sql, (err, rows) => {
     if (err) throw err;
     // displays tabular data as a table
     console.table(rows);
@@ -338,5 +337,65 @@ function removeEmployee() {
 
 // if the user selects to Update an Employee Role
 function updateEmployeeRole() {
+  // get employees from employee table
+  const employeeSql = `SELECT * FROM employee`;
 
-}
+  connection.promise().query(employeeSql, (err, data) => {
+    if (err) throw err;
+
+    const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
+
+    inquirer
+    // find the employee the user would like to update
+    .prompt ([
+      {
+        type: "list",
+        name: "name",
+        message: "Which employee would you like to update?",
+        choices: employees
+      }
+    ])
+    .then(employeeChoice => {
+      const employee = employeeChoice.name;
+      const params = [];
+      params.push(employee);
+
+      const roleSql = `SELECT * FROM role`;
+
+      connection.promise().query(roleSql, (err, data) => {
+        if (err) throw err;
+
+        const roles = data.map(({ id, title }) => ({ name: title, value: id }));
+
+        inquirer
+        .prompt([
+          {
+            type: "list",
+            name: "role",
+            message: "What is the new role of the employee?",
+            choices: roles
+          }
+        ])
+        .then(roleChoice => {
+          const role = roleChoice.role;
+          params.push(role);
+
+          let employee = params[0]
+          params[0] = role
+          params[1] = employee
+
+          console.log(params)
+
+          const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
+
+          connection.query(sql, params, (err, result) => {
+            if (err) throw err;
+            console.log("The employee has been updated!");
+
+            viewAllEmployees();
+          });
+        });
+      });
+    });
+  });
+};
