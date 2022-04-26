@@ -52,6 +52,30 @@ const prompt = () => {
         viewAllDepartments();
       }
 
+      if (choices === "View all Roles") {
+        viewAllRoles();
+      }
+
+      if (choices === "Add a Department") {
+        addDepartment();
+      }
+
+      if (choices === "Add a Role") {
+        addRole();
+      }
+
+      if (choices === "Add an Employee") {
+        addEmployee();
+      }
+
+      if (choices === "Remove an Employee") {
+        removeEmployee();
+      }
+
+      if (choices === "Update an Employee Role") {
+        updateEmployeeRole();
+      }
+
       if (choices === "Exit") {
         connection.end()
       };
@@ -78,7 +102,7 @@ const prompt = () => {
 }
 
 // if the user selects to View All Departments
-function viewAllDepartments() {
+ viewAllDepartments = () => {
   console.log("Showing all departments-\n");
   const sql = `SELECT department.id AS id, department.name AS department FROM department`;
 
