@@ -83,7 +83,7 @@ const prompt = () => {
 };
 
 // if the user selects to View All Employees
- viewAllEmployees = () => {
+viewAllEmployees = () => {
   console.log("Showing all employees-\n");
   const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
     FROM employee
@@ -102,7 +102,7 @@ const prompt = () => {
 }
 
 // if the user selects to View All Departments
- viewAllDepartments = () => {
+viewAllDepartments = () => {
   console.log("Showing all departments-\n");
   const sql = `SELECT department.id AS id, department.name AS department FROM department`;
 
@@ -115,9 +115,13 @@ const prompt = () => {
 };
 
 // if the user selects to View All Roles
- viewAllRoles = () => {
+viewAllRoles = () => {
   console.log("Showing all roles-\n");
-  const sql = `SELECT role.title, role.id, department.name AS department, role.salary FROM role`;
+  const sql = `SELECT role.title, role.id, department.name AS department, role.salary
+  FROM employee
+  LEFT JOIN role ON (role.id = employee.role_id)
+  LEFT JOIN department ON (department.id = role.department_id)
+  ORDER BY role.title;`;
 
   connection.query(sql, (err, res) => {
     if (err) throw err;
@@ -128,7 +132,7 @@ const prompt = () => {
 };
 
 // if the user selects to Add a Department
- addDepartment = () => {
+addDepartment = () => {
   inquirer
     .prompt([{
       type: "input",
@@ -157,7 +161,7 @@ const prompt = () => {
 };
 
 // if the user selects to Add a Role
- addRole = () => {
+addRole = () => {
   inquirer
     .prompt([{
         type: "input",
@@ -228,7 +232,7 @@ const prompt = () => {
 };
 
 // if the user selects to Add an Employee
- addEmployee = () => {
+addEmployee = () => {
   inquirer
     .prompt([{
         type: "input",
@@ -327,41 +331,46 @@ const prompt = () => {
 };
 
 // if the user selects to Remove an Employee
- removeEmployee = () => {
-   // get employees from employee table
-   const employeeSql = `SELECT * FROM employee`;
+removeEmployee = () => {
+  // get employees from employee table
+  const employeeSql = `SELECT * FROM employee`;
 
-   connection.query(employeeSql, (err, data) => {
-     if (err) throw err;
+  connection.query(employeeSql, (err, data) => {
+    if (err) throw err;
 
-     const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
+    const employees = data.map(({
+      id,
+      first_name,
+      last_name
+    }) => ({
+      name: first_name + " " + last_name,
+      value: id
+    }));
 
-     inquirer
-     .prompt([
-       {
-         type: "list",
-         name: "name",
-         message: "Which employee would you like to remove?",
-         choices: employees
-       }
-     ])
-     .then(empChoice => {
-       const employees = empChoice.name;
+    inquirer
+      .prompt([{
+        type: "list",
+        name: "name",
+        message: "Which employee would you like to remove?",
+        choices: employees
+      }])
+      .then(empChoice => {
+        const employees = empChoice.name;
 
-       const sql = `DELETE FROM employee WHERE id = ?`;
+        const sql = `DELETE FROM employee WHERE id = ?`;
 
-       connection.query(sql, employee, (err, result) => {
-         if (err) throw err;
-         console.log("The employee has been deleted.");
+        connection.query(sql, employee, (err, result) => {
+          if (err) throw err;
+          console.log("The employee has been deleted.");
 
-         viewAllEmployees();
-       });
-     });
-   });
+          viewAllEmployees();
+        });
+      });
+  });
 };
 
 // if the user selects to Update an Employee Role
- updateEmployeeRole = () => {
+updateEmployeeRole = () => {
   // get employees from employee table
   const employeeSql = `SELECT * FROM employee`;
 
