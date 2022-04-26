@@ -192,7 +192,7 @@ const prompt = () => {
       // getting the department from the department table
       const roleSql = `SELECT name, id FROM department`;
 
-      connection.promise().query(roleSql, (err, data) => {
+      connection.query(roleSql, (err, data) => {
         if (err) throw err;
 
         const dept = data.map(({
@@ -263,7 +263,7 @@ const prompt = () => {
       // getting roles from roles table
       const roleSql = `SELECT role.title, role.id FROM role`;
 
-      connection.promise().query(roleSql, (err, data) => {
+      connection.query(roleSql, (err, data) => {
         if (err) throw err;
 
         const roles = data.map(({
@@ -286,7 +286,7 @@ const prompt = () => {
 
             const managerSql = `SELECT * FROM employee`;
 
-            connection.promise().query(managerSql, (err, data) => {
+            connection.query(managerSql, (err, data) => {
               if (err) throw err;
 
               const managers = data.map(({
@@ -365,7 +365,7 @@ const prompt = () => {
   // get employees from employee table
   const employeeSql = `SELECT * FROM employee`;
 
-  connection.promise().query(employeeSql, (err, data) => {
+  connection.query(employeeSql, (err, data) => {
     if (err) throw err;
 
     const employees = data.map(({
@@ -392,7 +392,7 @@ const prompt = () => {
 
         const roleSql = `SELECT * FROM role`;
 
-        connection.promise().query(roleSql, (err, data) => {
+        connection.query(roleSql, (err, data) => {
           if (err) throw err;
 
           const roles = data.map(({

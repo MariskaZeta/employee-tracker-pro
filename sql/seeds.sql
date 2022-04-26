@@ -24,18 +24,18 @@ VALUES ("Software Engineer", 120000, 2);
 
 -- employee seeds --
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Michael", "Scott", 4, 2);
+VALUES ("Michael", "Scott", 4, null);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Pam", "Beesly", 6, 3);
+VALUES ("Pam", "Beesly", 6, 1);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Jim", "Halpert", 6, 3);
+VALUES ("Jim", "Halpert", 6, 2);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Oscar", "Martinez", 3, 3);
+VALUES ("Oscar", "Martinez", 3, null);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Olivia", "Benson", 2, 1);
+VALUES ("Olivia", "Benson", 2, 4);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Ron", "Swanson", 2, 1);
+VALUES ("Ron", "Swanson", 2, null);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Sherlock", "Holmes", 1, 3);
+VALUES ("Sherlock", "Holmes", 1, 6);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Rachel", "Green", 5, 4);
+VALUES ("Rachel", "Green", 5, null);
