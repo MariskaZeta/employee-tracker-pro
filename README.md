@@ -1,6 +1,7 @@
 # employee-tracker-pro
 
 ## Description
+A command-line application to manage a company's employee database, using Node.js, Inquirer, and MySQL.
 
 ## Table of Contents
 
@@ -13,8 +14,10 @@
 
 
 ## Installation
+The user should git clone the repository from GitHub. This application requires Node.js, Inquirer, console.table, and mysql2. To begin the application run node index.js. To view the database from MYSQL  mysql -u root -p.
 
 ## Usage
+This application allows users to view, add, and edit employees, roles, departments, and managers.
 
 ## Technologies
 * MySQL
