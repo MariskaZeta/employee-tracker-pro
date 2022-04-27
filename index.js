@@ -35,6 +35,7 @@ const prompt = () => {
         "Add a Role",
         "Add an Employee",
         "Remove an Employee",
+        "Remove a Role",
         "Update an Employee Role",
         "Exit"
       ]
@@ -70,6 +71,10 @@ const prompt = () => {
 
       if (choices === "Remove an Employee") {
         removeEmployee();
+      }
+
+      if (choices === "Remove a Role") {
+        removeRole();
       }
 
       if (choices === "Update an Employee Role") {
@@ -118,9 +123,8 @@ viewAllDepartments = () => {
 viewAllRoles = () => {
   console.log("Showing all roles-\n");
   const sql = `SELECT role.title, role.id, department.name AS department, role.salary
-  FROM employee
-  LEFT JOIN role ON (role.id = employee.role_id)
-  LEFT JOIN department ON (department.id = role.department_id)
+  FROM role
+  LEFT JOIN department ON role.department_id = department.id
   ORDER BY role.title;`;
 
   connection.query(sql, (err, res) => {
@@ -180,12 +184,11 @@ addRole = () => {
         type: "input",
         name: "salary",
         message: "What is the salary of this role?",
-        validate: roleSalary => {
-          if (isNAN(roleSalary)) {
-            return true;
+        validate: addSalary => {
+          if (isNaN(addSalary)) {
+            return "Please enter a numeric value for the salary of this role. Back space to re-enter your value please.";
           } else {
-            console.log("Please enter the salary for this role.");
-            return false;
+            return true;
           }
         }
       }
@@ -368,6 +371,39 @@ removeEmployee = () => {
       });
   });
 };
+
+// if the user selects to Remove a Role
+removeRole = () => {
+  // get roles from role table
+  const roleSql = `SELECT * FROM role`;
+
+  connection.query(roleSql, (err, data) => {
+    if (err) throw err;
+
+    const role = data.map(({ title, id }) => ({ name: title, value: id }));
+
+    inquirer.prompt([
+      {
+        type: "list",
+        name: "role",
+        message: "What role would you like to remove?",
+        choices: role
+      }
+    ])
+    .then(roleChoice => {
+      const role = roleChoice.role;
+      const sql = `DELETE FROM role WHERE id = ?`;
+
+      connection.query(sql, role, (err, result) => {
+        if (err) throw err;
+        console.log("Successfully deleted " + role);
+
+        viewAllRoles();
+      });
+    });
+  });
+};
+
 
 // if the user selects to Update an Employee Role
 updateEmployeeRole = () => {
