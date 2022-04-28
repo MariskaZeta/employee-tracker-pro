@@ -38,6 +38,7 @@ const prompt = () => {
         "Remove a Role",
         "Update an Employee Role",
         "Update an Employee's Manager",
+        "View Employees by Department",
         "View Department Budget",
         "Exit"
       ]
@@ -85,6 +86,10 @@ const prompt = () => {
 
       if (choices === "Update an Employee's Manager") {
         updateEmployeeManager();
+      }
+
+      if (choices === "View Employees by Department") {
+        viewEmployeeDepartment();
       }
 
       if (choices === "View Department Budget") {
@@ -549,6 +554,21 @@ updateEmployeeManager = () => {
     });
   });
 };
+
+// if user selects to view an employee by their department
+viewEmployeeDepartment = () => {
+  console.log("Displaying employees by their department.");
+  const sql = `SELECT employee.first_name, employee.last_name, department.name AS department
+  FROM employee
+  LEFT JOIN role ON employee.role_id = role.id
+  LEFT JOIN department ON role.department_id = department.id`;
+
+  connection.query(sql, (err, rows) => {
+    if (err) throw err;
+    console.table(rows);
+    prompt();
+  })
+}
 
 // if user selects to View Department Budget
 viewDepartmentBudget = () => {
