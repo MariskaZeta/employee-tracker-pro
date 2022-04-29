@@ -617,7 +617,43 @@ updateEmployeeManager = () => {
 
 // TODO:
 // if the user selects to view Employees by Manager
-viewEmployeeManager = () => {}
+viewEmployeeManager = () => {
+    // get all managers from the employee
+    const managerSql = `SELECT * FROM employee`;
+
+    connection.query(managerSql, (err, data) => {
+      if (err) throw err;
+// making an array of the managers from the employee table
+      const managers = data.map(({
+        id,
+        first_name,
+        last_name
+      }) => ({
+        name: first_name + " " + last_name,
+        value: id
+      }));
+      // now creating a prompt to find out which manager the user wants to filter from
+      inquirer.prompt([{
+          type: "list",
+          name: "manager",
+          message: "Please select the manager you would like to filter from:",
+          choices: managers
+        }])
+        .then(managerChoice => {
+          const manager = managerChoice.managers;
+          // TO DO: ADD SQL SELECT QUERY
+          const employeeSql = ``;
+
+          connection.query(employeeSql, (err, rows) => {
+            if (err) throw err;
+            console.log("Displaying employees under the selected manager:");
+            console.table(rows);
+
+            prompt();
+          });
+        });
+    });
+  };
 
 // if the user selects to view Employees by Department
 viewEmployeeDepartment = () => {
