@@ -39,6 +39,7 @@ const prompt = () => {
         "Remove a Role",
         "Update an Employee Role",
         "Update an Employee's Manager",
+        "View Employees by Manager",
         "View Employees by Department",
         "View Department Budget",
         "Exit"
@@ -91,6 +92,10 @@ const prompt = () => {
 
       if (choices === "Update an Employee's Manager") {
         updateEmployeeManager();
+      }
+
+      if (choices === "View Employees by Manager") {
+        viewEmployeeManager();
       }
 
       if (choices === "View Employees by Department") {
@@ -610,22 +615,58 @@ updateEmployeeManager = () => {
   });
 };
 
-// if user selects to view an employee by their department
+// TODO:
+// if the user selects to view Employees by Manager
+viewEmployeeManager = () => {}
+
+// if the user selects to view Employees by Department
 viewEmployeeDepartment = () => {
-  console.log("Displaying employees by their department.");
-  const sql = `SELECT employee.first_name, employee.last_name, department.name AS department
-  FROM employee
-  LEFT JOIN role ON employee.role_id = role.id
-  LEFT JOIN department ON role.department_id = department.id`;
 
-  connection.query(sql, (err, rows) => {
-    if (err) throw err;
-    console.table(rows);
-    prompt();
-  })
-}
+  connection.query(
+    // get all departments from the department table
+    `SELECT * FROM department`,
 
-// if user selects to View Department Budget
+    function(err, results, fields) {
+      if (err) {
+        console.log(err.message);
+        return;
+      }
+      depArr = [];
+      results.forEach(item => {
+        depArr.push(item.name)
+      });
+      inquirer
+        .prompt({
+          type: 'list',
+          name: 'filter-emp-dep',
+          message: 'Please select a department to filter from:',
+          choices: depArr
+        })
+        .then((data) => {
+          connection.query(
+            `SELECT employee.id, employee.first_name, employee.last_name, department.name AS department
+                            FROM employee
+                            LEFT JOIN role
+                            ON employee.role_id = role.id
+                            LEFT JOIN department
+                            ON role.department_id = department.id
+                            WHERE department.name = ?`,
+            [data['filter-emp-dep']],
+            function(err, results, fields) {
+              if (err) {
+                console.log(err.message);
+                return;
+              }
+              console.table(results);
+              prompt();
+            }
+          )
+        });
+    }
+  );
+};
+
+// if the user selects to View Department Budget
 viewDepartmentBudget = () => {
   console.log("Displaying budget by department \n");
 
