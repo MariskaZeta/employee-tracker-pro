@@ -652,7 +652,7 @@ viewEmployeeManager = () => {
 
           connection.query(employeeSql, (err, rows) => {
             if (err) throw err;
-            console.log("Displaying employees under the selected manager:");
+            console.log("Displaying employees working on the selected manager's team:");
             console.table(rows);
             prompt();
           });
@@ -687,18 +687,19 @@ viewEmployeeDepartment = () => {
         .then((data) => {
           connection.query(
             `SELECT employee.id, employee.first_name, employee.last_name, department.name AS department
-                            FROM employee
-                            LEFT JOIN role
-                            ON employee.role_id = role.id
-                            LEFT JOIN department
-                            ON role.department_id = department.id
-                            WHERE department.name = ?`,
+             FROM employee
+             LEFT JOIN role
+             ON employee.role_id = role.id
+             LEFT JOIN department
+             ON role.department_id = department.id
+             WHERE department.name = ?`,
             [data['filter-emp-dep']],
             function(err, results, fields) {
               if (err) {
                 console.log(err.message);
                 return;
               }
+              console.log("Displaying employees under the selected department:");
               console.table(results);
               prompt();
             }
