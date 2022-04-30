@@ -19,20 +19,20 @@ The user should git clone the repository from GitHub. This application requires 
 * More detailed installation instructions under [Instructions](#instructions)
 
 ## Usage
-This application is intended to allow users to SELECT, INSERT, UPDATE, and DELETE information in the employee database.
+This application is intended to allow users to SELECT, INSERT, UPDATE, and DELETE information in the employee database. It also allows users to view employees, roles, and departments. Users can search for employees by a manager, search for employees by a department, and view the combined salaries of all employees from a selected department.
 
 ## Technologies
-* MySQL
 * JavaScript
 * Node.js
 * Inquirer npm package
 * Console.table package
+* MySQL2 package
 
 ## Instructions
 * Step 1: Install Node.js
 * Step 2: Clone the repository
 * Step 3: Install NPM
-* Step 4; Install and configue MySQL
+* Step 4; Install and configure MySQL
 * Step 5: Open the MySQL CLI by typing `mysql -u root -p` in your bash (Ensure you have MySQL downloaded on your local machine!)
 * Step 6: In the MySQL CLI, type source `db/schema.sql` to populate the database and tables
 * Step 7: (Optional) If you would like predefined employees, roles, and departments type `source db/seeds.sql`

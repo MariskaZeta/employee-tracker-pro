@@ -15,7 +15,7 @@ const connection = mysql.createConnection({
 
 connection.connect(err => {
   if (err) throw err;
-  console.log("\n Welcome to the employee tracker! \n");
+  console.log("\n Welcome to the Employee Tracker Pro! \n");
   // now running the start function after the connection is made to prompt the user
   prompt();
 })
@@ -28,17 +28,17 @@ const prompt = () => {
       name: "choices",
       message: "What would you like to do?",
       choices: [
-        "View all Employees",
-        "Add an Employee",
-        "Remove an Employee",
-        "Update an Employee Role",
-        "Update an Employee's Manager",
-        "View Employees by Manager",
-        "View Employees by Department",
+        "View Department Budget",
         "View all Departments",
         "Add a Department",
         "Remove a Department",
-        "View Department Budget",
+        "View all Employees",
+        "View Employees by Manager",
+        "View Employees by Department",
+        "Add an Employee",
+        "Remove an Employee",
+        "Update an Employee's Manager",
+        "Update an Employee Role",
         "View all Roles",
         "Add a Role",
         "Remove a Role",
@@ -620,45 +620,45 @@ updateEmployeeManager = () => {
 // if the user selects to view Employees by Manager
 // Bonus Objective
 viewEmployeeManager = () => {
-    // get all managers from the employee
-    const managerSql = `SELECT * FROM employee`;
+  // get all managers from the employee
+  const managerSql = `SELECT * FROM employee`;
 
-    connection.query(managerSql, (err, data) => {
-      if (err) throw err;
-// making an array of the managers from the employee table
-      const managers = data.map(({
-        id,
-        first_name,
-        last_name
-      }) => ({
-        name: first_name + " " + last_name,
-        value: id
-      }));
-      // now creating a prompt to find out which manager the user wants to filter from
-      inquirer.prompt([{
-          type: "list",
-          name: "manager",
-          message: "Please select the manager you would like to filter from:",
-          choices: managers
-        }])
-          .then(managerChoice => {
-            const manager = managerChoice.manager;
-          const employeeSql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary
+  connection.query(managerSql, (err, data) => {
+    if (err) throw err;
+    // making an array of the managers from the employee table
+    const managers = data.map(({
+      id,
+      first_name,
+      last_name
+    }) => ({
+      name: first_name + " " + last_name,
+      value: id
+    }));
+    // now creating a prompt to find out which manager the user wants to filter from
+    inquirer.prompt([{
+        type: "list",
+        name: "manager",
+        message: "Please select the manager you would like to filter from:",
+        choices: managers
+      }])
+      .then(managerChoice => {
+        const manager = managerChoice.manager;
+        const employeeSql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary
           FROM employee
           JOIN role ON (role.id = employee.role_id)
           JOIN department ON (department.id = role.department_id)
           WHERE manager_id = ${manager}
           ORDER BY employee.id;`;
 
-          connection.query(employeeSql, (err, rows) => {
-            if (err) throw err;
-            console.log("Displaying employees working on the selected manager's team:");
-            console.table(rows);
-            prompt();
-          });
+        connection.query(employeeSql, (err, rows) => {
+          if (err) throw err;
+          console.log("Displaying employees working on the selected manager's team:");
+          console.table(rows);
+          prompt();
         });
-    });
-  };
+      });
+  });
+};
 
 // if the user selects to view Employees by Department
 // Bonus Objective
