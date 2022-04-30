@@ -43,11 +43,14 @@ This application is intended to allow users to SELECT, INSERT, UPDATE, and DELET
 
 ## Github
 Here is the link to the GitHub URL:
+https://github.com/MariskaZeta/employee-tracker-pro
 
 Here is the link to clone for the GitHub repository:
+https://github.com/MariskaZeta/employee-tracker-pro.git
 
 # Video
 Here is the link to the video demonstration:
+https://drive.google.com/file/d/1XVGywc8CuJ5tQy51BHPJ1yZOM9kEdx9_/view
 
 ## Screenshot
 
