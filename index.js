@@ -330,8 +330,6 @@ addEmployee = () => {
                 value: id
               }));
 
-              console.log(managers);
-
               inquirer.prompt([{
                   type: "list",
                   name: "manager",
@@ -645,8 +643,6 @@ viewEmployeeManager = () => {
         }])
           .then(managerChoice => {
             const manager = managerChoice.manager;
-          // TO DO: ADD SQL SELECT QUERY
-          console.log(`manager choice ${JSON.stringify(manager)}`);
           const employeeSql =  `SELECT * FROM employee WHERE manager_id =
           ${manager}`;
 
