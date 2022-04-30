@@ -29,19 +29,19 @@ const prompt = () => {
       message: "What would you like to do?",
       choices: [
         "View all Employees",
-        "View all Departments",
-        "View all Roles",
-        "Add a Department",
-        "Add a Role",
         "Add an Employee",
         "Remove an Employee",
-        "Remove a Department",
-        "Remove a Role",
         "Update an Employee Role",
         "Update an Employee's Manager",
         "View Employees by Manager",
         "View Employees by Department",
+        "View all Departments",
+        "Add a Department",
+        "Remove a Department",
         "View Department Budget",
+        "View all Roles",
+        "Add a Role",
+        "Remove a Role",
         "Exit"
       ]
     }])
@@ -359,6 +359,7 @@ addEmployee = () => {
 };
 
 // if the user selects to Remove an Employee
+// Bonus Objective
 removeEmployee = () => {
   // get employees from employee table
   const employeeSql = `SELECT * FROM employee`;
@@ -387,7 +388,7 @@ removeEmployee = () => {
 
         const sql = `DELETE FROM employee WHERE id = ?`;
 
-        connection.query(sql, employee, (err, result) => {
+        connection.query(sql, employees, (err, result) => {
           if (err) throw err;
           console.log("The employee has been deleted.");
 
@@ -398,6 +399,7 @@ removeEmployee = () => {
 };
 
 // if the user selects to Remove a Department
+// Bonus Objective
 removeDepartment = () => {
   // get all departments from department table
   const deptSql = `SELECT * FROM department`;
@@ -435,6 +437,7 @@ removeDepartment = () => {
 };
 
 // if the user selects to Remove a Role
+// Bonus Objective
 removeRole = () => {
   // get roles from role table
   const roleSql = `SELECT * FROM role`;
@@ -545,6 +548,7 @@ updateEmployeeRole = () => {
 };
 
 // if the user selects to Update an Employee's Manager
+// Bonus Objective
 updateEmployeeManager = () => {
   // get all employees for user to choose from, from the employee table
   const employeeSql = `SELECT * FROM employee`;
@@ -615,8 +619,8 @@ updateEmployeeManager = () => {
   });
 };
 
-// TODO:
 // if the user selects to view Employees by Manager
+// Bonus Objective
 viewEmployeeManager = () => {
     // get all managers from the employee
     const managerSql = `SELECT * FROM employee`;
@@ -657,6 +661,7 @@ viewEmployeeManager = () => {
   };
 
 // if the user selects to view Employees by Department
+// Bonus Objective
 viewEmployeeDepartment = () => {
 
   connection.query(
@@ -704,6 +709,7 @@ viewEmployeeDepartment = () => {
 };
 
 // if the user selects to View Department Budget
+// Bonus Objective
 viewDepartmentBudget = () => {
   console.log("Displaying budget by department \n");
 
