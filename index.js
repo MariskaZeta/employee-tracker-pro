@@ -643,8 +643,7 @@ viewEmployeeManager = () => {
         }])
           .then(managerChoice => {
             const manager = managerChoice.manager;
-          const employeeSql =  `SELECT * FROM employee WHERE manager_id =
-          ${manager}`;
+          const employeeSql = `SELECT * FROM employee WHERE manager_id = ${manager}`;
 
           connection.query(employeeSql, (err, rows) => {
             if (err) throw err;
@@ -709,13 +708,15 @@ viewEmployeeDepartment = () => {
 viewDepartmentBudget = () => {
   console.log("Displaying budget by department \n");
 
-  const sql = `SELECT department_id AS id, department.name AS department, SUM(salary) AS budget
-  FROM role
+  const sql = `SELECT department_id AS id, department.name AS department, SUM(role.salary) AS budget
+  FROM employee
+  JOIN role ON employee.role_id = role.id
   JOIN department ON role.department_id = department.id GROUP BY department_id`;
 
   connection.query(sql, (err, rows) => {
     if (err) throw err;
     console.table(rows);
+
 
     prompt();
   });
