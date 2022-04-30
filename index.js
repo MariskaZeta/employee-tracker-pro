@@ -643,7 +643,12 @@ viewEmployeeManager = () => {
         }])
           .then(managerChoice => {
             const manager = managerChoice.manager;
-          const employeeSql = `SELECT * FROM employee WHERE manager_id = ${manager}`;
+          const employeeSql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary
+          FROM employee
+          JOIN role ON (role.id = employee.role_id)
+          JOIN department ON (department.id = role.department_id)
+          WHERE manager_id = ${manager}
+          ORDER BY employee.id;`;
 
           connection.query(employeeSql, (err, rows) => {
             if (err) throw err;
