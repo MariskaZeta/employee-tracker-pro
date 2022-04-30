@@ -639,16 +639,17 @@ viewEmployeeManager = () => {
           message: "Please select the manager you would like to filter from:",
           choices: managers
         }])
-        .then(managerChoice => {
-          const manager = managerChoice.managers;
+          .then(managerChoice => {
+            const manager = managerChoice.manager;
           // TO DO: ADD SQL SELECT QUERY
-          const employeeSql = ``;
+          console.log(`manager choice ${JSON.stringify(manager)}`);
+          const employeeSql =  `SELECT * FROM employee WHERE manager_id =
+          ${manager}`;
 
           connection.query(employeeSql, (err, rows) => {
             if (err) throw err;
             console.log("Displaying employees under the selected manager:");
             console.table(rows);
-
             prompt();
           });
         });
