@@ -388,7 +388,7 @@ removeEmployee = () => {
 
         connection.query(sql, employees, (err, result) => {
           if (err) throw err;
-          console.log("The employee has been deleted.");
+          console.log("The selected employee has been deleted.");
 
           viewAllEmployees();
         });
@@ -426,7 +426,7 @@ removeDepartment = () => {
 
         connection.query(sql, dept, (err, result) => {
           if (err) throw err;
-          console.log("Successfully deleted.");
+          console.log("The selected department has been deleted.");
 
           viewAllDepartments();
         });
@@ -463,7 +463,7 @@ removeRole = () => {
 
         connection.query(sql, role, (err, result) => {
           if (err) throw err;
-          console.log("Successfully deleted " + role);
+          console.log("The selected role has been deleted.");
 
           viewAllRoles();
         });
